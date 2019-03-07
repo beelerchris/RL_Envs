@@ -32,8 +32,21 @@ class RubiksCube():
         self.num_actions = len(self.actions_map)
 
     def reset(self):
-        cube_index = np.arange(0, self.cube.shape[0]*self.cube.shape[1]*self.cube.shape[2], 1, dtype=np.int32)
-        np.random.shuffle(cube_index)
+        cube_index_short = np.arange(0, self.cube.shape[0]*self.cube.shape[1]*self.cube.shape[2]-3, 1, dtype=np.int32)
+        cube_index_short[10:] += 1
+        cube_index_short[14:] += 1
+        cube_index_short[17:] += 1
+        np.random.shuffle(cube_index_short)
+        cube_index = np.zeros(self.cube.shape[0]*self.cube.shape[1]*self.cube.shape[2], dtype=np.int32)
+        j = 0
+        for i in range(cube_index.shape[0]):
+            if i != 10 and i != 15 and i != 19:
+                cube_index[i] = cube_index_short[j]
+                j += 1
+
+        cube_index[10] = 10
+        cube_index[15] = 15
+        cube_index[19] = 19
         cube = np.array([0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5])
         count = 0
         for i in range(self.cube.shape[0]):

@@ -9,13 +9,17 @@ class RubiksCube():
         self.actions_map = {0: self.horizontal_cw,
                             1: self.horizontal_ccw,
                             2: self.vertical_cw,
-                            3: self.vertical_ccw}
+                            3: self.vertical_ccw,
+                            4: self.planar_cw,
+                            5: self.planar_ccw}
 
         # Human readable dictionary for mapping actions to index of action
         self.actions = {'horizontal_cw': 0,
                         'horizontal_ccw': 1,
                         'vertical_cw': 2,
-                        'vertical_ccw': 3}
+                        'vertical_ccw': 3,
+                        'planar_cw': 4,
+                        'planar_ccw': 5}
 
         # 3D interpretation of which 2x2 face corresponds to the faces on a 2x2x2 Rubik's Cube
         self.faces = {'Front': 0,
@@ -170,5 +174,59 @@ class RubiksCube():
         new_cube[5, 0, 1] = self.cube[5, 1, 1]
         new_cube[5, 1, 0] = self.cube[5, 0, 0]
         new_cube[5, 1, 1] = self.cube[5, 1, 0]
+
+        self.cube = new_cube
+
+    # Rotate front half in the clockwise direction
+    def planar_cw(self):
+        new_cube = np.zeros(self.cube.shape, dtype=np.float32)
+        for i in range(6):
+            for j in range(2):
+                for k in range(2):
+                    new_cube[i, j, k] = self.cube[i, j, k]
+
+        new_cube[0, 0, 0] = self.cube[0, 1, 0]
+        new_cube[0, 0, 1] = self.cube[0, 0, 0]
+        new_cube[0, 1, 0] = self.cube[0, 1, 1]
+        new_cube[0, 1, 1] = self.cube[0, 0, 1]
+
+        new_cube[1, 1, 0] = self.cube[5, 1, 1]
+        new_cube[1, 1, 1] = self.cube[5, 0, 1]
+
+        new_cube[3, 0, 0] = self.cube[4, 1, 0]
+        new_cube[3, 0, 1] = self.cube[4, 0, 0]
+
+        new_cube[4, 0, 0] = self.cube[1, 1, 0]
+        new_cube[4, 1, 0] = self.cube[1, 1, 1]
+
+        new_cube[5, 0, 1] = self.cube[3, 0, 0]
+        new_cube[5, 1, 1] = self.cube[3, 0, 1]
+
+        self.cube = new_cube
+
+    # Rotate front half in the counter-clockwise direction
+    def planar_ccw(self):
+        new_cube = np.zeros(self.cube.shape, dtype=np.float32)
+        for i in range(6):
+            for j in range(2):
+                for k in range(2):
+                    new_cube[i, j, k] = self.cube[i, j, k]
+
+        new_cube[0, 0, 0] = self.cube[0, 0, 1]
+        new_cube[0, 0, 1] = self.cube[0, 1, 1]
+        new_cube[0, 1, 0] = self.cube[0, 0, 0]
+        new_cube[0, 1, 1] = self.cube[0, 1, 0]
+
+        new_cube[1, 1, 0] = self.cube[4, 0, 0]
+        new_cube[1, 1, 1] = self.cube[4, 1, 0]
+
+        new_cube[3, 0, 0] = self.cube[5, 0, 1]
+        new_cube[3, 0, 1] = self.cube[5, 1, 1]
+
+        new_cube[4, 0, 0] = self.cube[3, 0, 1]
+        new_cube[4, 1, 0] = self.cube[3, 0, 0]
+
+        new_cube[5, 0, 1] = self.cube[1, 1, 1]
+        new_cube[5, 1, 1] = self.cube[1, 1, 0]
 
         self.cube = new_cube

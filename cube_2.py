@@ -32,8 +32,18 @@ class RubiksCube():
         self.num_actions = len(self.actions_map)
 
     def reset(self):
+        cube_index = np.arange(0, self.cube.shape[0]*self.cube.shape[1]*self.cube.shape[2], 1, dtype=np.int32)
+        np.random.shuffle(cube_index)
+        cube = np.array([0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5])
+        count = 0
+        for i in range(self.cube.shape[0]):
+            for j in range(self.cube.shape[1]):
+                for k in range(self.cube.shape[2]):
+                    self.cube[i, j, k] = cube[cube_index[count]]
+                    count += 1
+
         # Solved initial condition for debugging purposes
-        self.cube = np.array([[[0, 0], [0, 0]], [[1, 1], [1, 1]], [[2, 2], [2, 2]], [[3, 3], [3, 3]], [[4, 4], [4, 4]], [[5, 5], [5, 5]]])
+        #self.cube = np.array([[[0, 0], [0, 0]], [[1, 1], [1, 1]], [[2, 2], [2, 2]], [[3, 3], [3, 3]], [[4, 4], [4, 4]], [[5, 5], [5, 5]]])
 
         # Decimal labels are for debugging purposes to have uniqueness for each square
         #self.cube = np.array([[[0.0, 0.1], [0.2, 0.3]], [[1.0, 1.1], [1.2, 1.3]], [[2.0, 2.1], [2.2, 2.3]], [[3.0, 3.1], [3.2, 3.3]], [[4.0, 4.1], [4.2, 4.3]], [[5.0, 5.1], [5.2, 5.3]]])
@@ -80,9 +90,9 @@ class RubiksCube():
     # Rotate top half in the clockwise direction
     def horizontal_cw(self):
         new_cube = np.zeros(self.cube.shape, dtype=np.float32)
-        for i in range(6):
-            for j in range(2):
-                for k in range(2):
+        for i in range(self.cube.shape[0]):
+            for j in range(self.cube.shape[1]):
+                for k in range(self.cube.shape[2]):
                     new_cube[i, j, k] = self.cube[i, j, k]
 
         new_cube[0, 0] = self.cube[4, 0]
@@ -103,9 +113,9 @@ class RubiksCube():
     # Rotate top half in the counter-clockwise direction
     def horizontal_ccw(self):
         new_cube = np.zeros(self.cube.shape, dtype=np.float32)
-        for i in range(6):
-            for j in range(2):
-                for k in range(2):
+        for i in range(self.cube.shape[0]):
+            for j in range(self.cube.shape[1]):
+                for k in range(self.cube.shape[2]):
                     new_cube[i, j, k] = self.cube[i, j, k]
 
         new_cube[0, 0] = self.cube[5, 0]
@@ -126,9 +136,9 @@ class RubiksCube():
     # Rotate left half in the clockwise direction
     def vertical_cw(self):
         new_cube = np.zeros(self.cube.shape, dtype=np.float32)
-        for i in range(6):
-            for j in range(2):
-                for k in range(2):
+        for i in range(self.cube.shape[0]):
+            for j in range(self.cube.shape[1]):
+                for k in range(self.cube.shape[2]):
                     new_cube[i, j, k] = self.cube[i, j, k]
 
         new_cube[0, 0, 0] = self.cube[1, 0, 0]
@@ -153,9 +163,9 @@ class RubiksCube():
     # Rotate left half in the counter-clockwise direction
     def vertical_ccw(self):
         new_cube = np.zeros(self.cube.shape, dtype=np.float32)
-        for i in range(6):
-            for j in range(2):
-                for k in range(2):
+        for i in range(self.cube.shape[0]):
+            for j in range(self.cube.shape[1]):
+                for k in range(self.cube.shape[2]):
                     new_cube[i, j, k] = self.cube[i, j, k]
 
         new_cube[0, 0, 0] = self.cube[3, 0, 0]
@@ -180,9 +190,9 @@ class RubiksCube():
     # Rotate front half in the clockwise direction
     def planar_cw(self):
         new_cube = np.zeros(self.cube.shape, dtype=np.float32)
-        for i in range(6):
-            for j in range(2):
-                for k in range(2):
+        for i in range(self.cube.shape[0]):
+            for j in range(self.cube.shape[1]):
+                for k in range(self.cube.shape[2]):
                     new_cube[i, j, k] = self.cube[i, j, k]
 
         new_cube[0, 0, 0] = self.cube[0, 1, 0]
@@ -207,9 +217,9 @@ class RubiksCube():
     # Rotate front half in the counter-clockwise direction
     def planar_ccw(self):
         new_cube = np.zeros(self.cube.shape, dtype=np.float32)
-        for i in range(6):
-            for j in range(2):
-                for k in range(2):
+        for i in range(self.cube.shape[0]):
+            for j in range(self.cube.shape[1]):
+                for k in range(self.cube.shape[2]):
                     new_cube[i, j, k] = self.cube[i, j, k]
 
         new_cube[0, 0, 0] = self.cube[0, 0, 1]
